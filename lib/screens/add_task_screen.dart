@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/task_provider.dart';
 import '../models/task.dart';
+import '../providers/task_provider.dart';
 
 class AddTaskScreen extends StatelessWidget {
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final Task? task;
+  final TextEditingController _titleController = TextEditingController();
 
-  AddTaskScreen({super.key});
+  AddTaskScreen({super.key, this.task}) {
+    if (task != null) {
+      _titleController.text = task!.title;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Task')),
+      appBar: AppBar(
+        title: Text(task == null ? 'Add Task' : 'Edit Task'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -21,22 +27,24 @@ class AddTaskScreen extends StatelessWidget {
               controller: _titleController,
               decoration: const InputDecoration(labelText: 'Task Title'),
             ),
-            TextField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Task Description'),
-            ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                final task = Task(
-                  title: _titleController.text,
-                  description: _descriptionController.text,
-                );
-                Provider.of<TaskProvider>(context, listen: false).addTask(task);
-                Navigator.pop(context);
+              onPressed: () async {
+                if (_titleController.text.isNotEmpty) {
+                  if (task == null) {
+                    await Provider.of<TaskProvider>(context, listen: false)
+                        .addTask(_titleController.text);
+                  } else {
+                    await Provider.of<TaskProvider>(context, listen: false)
+                        .deleteTask(task!.id);
+                    await Provider.of<TaskProvider>(context, listen: false)
+                        .addTask(_titleController.text);
+                  }
+                  Navigator.pop(context);
+                }
               },
-              child: const Text('Save Task'),
-            ),
+              child: Text(task == null ? 'Add Task' : 'Update Task'),
+            )
           ],
         ),
       ),
