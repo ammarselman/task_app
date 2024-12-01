@@ -1,4 +1,4 @@
-# untitled
+# Task app
 
 this project with use flutter and dart to list the task and use statemangement
 
