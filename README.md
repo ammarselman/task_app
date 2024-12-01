@@ -1,10 +1,12 @@
-# untitled
+# Task app
 
-A new Flutter project.
+this project with use flutter and dart to list the task and use statemangement
 
 ## Getting Started
 
 This project is a starting point for a Flutter application.
+
+![taskapp](https://github.com/user-attachments/assets/5c835ba1-d47a-483b-8870-87568dc8f88c)
 
 A few resources to get you started if this is your first Flutter project:
 
